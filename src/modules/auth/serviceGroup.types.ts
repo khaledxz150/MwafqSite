@@ -2,6 +2,7 @@ import type {
   PaginatedResponse,
   UpstreamApiResponse,
 } from '@/shared/types/api.types';
+import type { Locale } from '@/i18n/config';
 import { CourseListItem } from './course.types';
 
 export interface ServiceGroupTranslation {
@@ -82,4 +83,6 @@ export type FetchServiceGroupListParams = {
   OrderBy?: string;
   Search?: string;
   OrderDirection?: boolean;
+  /** Sent upstream as `?culture=en`/`?culture=ar`. */
+  culture?: Locale;
 };

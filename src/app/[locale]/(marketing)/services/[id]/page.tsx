@@ -63,7 +63,7 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
       if (error instanceof FetchResponseError) notFound();
       throw error;
     }),
-    fetchServiceGroupsList({ pageNumber: 1, pageSize: 6 }),
+    fetchServiceGroupsList({ pageNumber: 1, pageSize: 6, culture: locale }),
     getCurrentUser(),
   ]);
 
@@ -87,7 +87,8 @@ export default async function ServiceGroupDetailsPage({ params }: PageProps) {
           '@context': 'https://schema.org',
           '@type': 'MedicalTest',
           name: translation.name,
-          description: stripHtmlToNull(translation.description) ?? translation.name,
+          description:
+            stripHtmlToNull(translation.description) ?? translation.name,
           url: `${SITE_URL}/${locale}${ROUTES.SERVICES}/${numericId}`,
         }}
       />

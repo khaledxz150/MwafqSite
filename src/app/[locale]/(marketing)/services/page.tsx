@@ -29,10 +29,12 @@ export async function generateMetadata({
 }
 
 export default async function ServicesRoute({
+  params,
   searchParams,
-}: {
+}: RouteProps & {
   searchParams: Promise<{ search: string; page: string }>;
 }) {
+  const { locale } = await params;
   const { search, page } = await searchParams;
 
   const data = await fetchServiceGroupsList({
@@ -40,6 +42,7 @@ export default async function ServicesRoute({
     pageSize: 8,
     Search: search,
     OrderDirection: true,
+    culture: hasLocale(locale) ? locale : undefined,
   });
 
   return (
