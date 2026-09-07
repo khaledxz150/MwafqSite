@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "dev:https": "next dev --experimental-https",
-    "build": "next build",
+    "clean": "rimraf .next .next.zip public.zip",
+    "build": "npm run clean && next build",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
@@ -49,6 +50,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.4",
     "prettier": "^3.5.0",
+    "rimraf": "^6.0.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }
