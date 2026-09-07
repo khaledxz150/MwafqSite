@@ -27,13 +27,18 @@ export function ChatbotWidget() {
   const close = useCallback(() => setOpen(false), []);
 
   // Clicking the floating teaser cloud opens the panel and immediately asks
-  // that question, so curiosity gets a real answer in one click.
+  // that question, added to the existing conversation like any other
+  // message — it should never wipe history the visitor already has.
+  // `stop()` only cancels a request still in flight (a ref, no state
+  // change), so a stale pending answer can't block or double up with the
+  // new one.
   const selectTeaser = useCallback(
     (suggestion: string) => {
+      stop();
       setOpen(true);
       send(suggestion);
     },
-    [send]
+    [stop, send]
   );
 
   // Esc closes the panel from anywhere on the page.

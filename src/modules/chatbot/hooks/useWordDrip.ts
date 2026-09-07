@@ -13,8 +13,13 @@ const WORD_INTERVAL_MS = 55;
  * up to the latest `target` (even after the network side has already
  * finished sending), and simply holds once caught up. If `target` is
  * replaced with a shorter or unrelated string (a new message), it restarts
- * from scratch. Pass `enabled: false` (reduced motion) to skip the drip
- * entirely and return `target` as-is.
+ * from scratch.
+ *
+ * Pass `enabled: false` to skip the drip and return `target` as-is —
+ * required both for reduced motion, and for a message that was ALREADY
+ * fully received before this hook's first render (e.g. the chat panel was
+ * closed and reopened): without that second case, every remount would
+ * replay old, already-finished answers as if they were streaming in again.
  */
 export function useWordDrip(target: string, enabled: boolean): string {
   const [shown, setShown] = useState('');

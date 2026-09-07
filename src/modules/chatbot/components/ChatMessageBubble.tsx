@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, useReducedMotion } from 'framer-motion';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { cn } from '@/shared/lib/cn';
 import { ChatAnswerContent } from '@/modules/chatbot/components/ChatAnswerContent';
@@ -20,13 +20,20 @@ export function ChatMessageBubble({ message, onGrow }: ChatMessageBubbleProps) {
   const isUser = message.role === 'user';
   const isError = message.status === 'error';
 
+  // Whether this message had already finished streaming the moment this
+  // bubble first mounted — e.g. it's history from before the panel was
+  // closed and reopened. Computed once (lazy initializer) so a remount
+  // never replays an already-complete answer as if it were streaming in.
+  const [wasAlreadyDone] = useState(() => message.status === 'done');
+
   // Upstream delivers whole paragraphs at once; reveal them word-by-word so a
   // reply still reads like it's being typed instead of jumping in blocks. The
-  // drip stays enabled even after the network marks the message done, so the
-  // last chunk finishes revealing smoothly instead of landing as one block.
+  // drip stays enabled through the pending-to-done transition (so the last
+  // chunk finishes revealing smoothly instead of landing as one block), but
+  // never for a message that was already done before this mount.
   const displayText = useWordDrip(
     message.text,
-    !isUser && !isError && !reduceMotion
+    !isUser && !isError && !reduceMotion && !wasAlreadyDone
   );
 
   // The word drip grows the bubble's height independently of the messages
