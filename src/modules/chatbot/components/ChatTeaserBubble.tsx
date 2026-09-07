@@ -26,6 +26,11 @@ interface ChatTeaserBubbleProps {
  * suggested question, then fades — a hint that this is a live assistant you
  * can actually ask things, not a decoration. Only meant to run while the
  * panel is closed; unmount it when the panel opens.
+ *
+ * Mount with `key={topic}` at the call site — a new `suggestions` array
+ * (the visitor scrolled into a different section or navigated) should
+ * restart the cycle fresh from index 0, and remounting is the correct way
+ * to reset internal state on a prop change rather than syncing it via effect.
  */
 export function ChatTeaserBubble({
   suggestions,

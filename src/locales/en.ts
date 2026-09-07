@@ -1245,6 +1245,40 @@ const en = {
       'What services do you offer?',
       'How do I book a medical exam?',
     ],
+    // Shown by the floating teaser bubble instead of the generic list above,
+    // once the visitor is on a page or section with a clearer topic.
+    sectionSuggestions: {
+      home: ['What is Mwafq?', 'What services do you offer?'],
+      services: [
+        'What medical exams can I book — residency, driving license, or health certificate?',
+        'Do you offer pre-marital and pre-school exams?',
+      ],
+      booking: [
+        'What are the 3 steps to complete a medical exam booking?',
+        'Can I track my exam status in real time?',
+      ],
+      academy: [
+        'What is Mwafq Academy, and is training available in 7 languages?',
+        'Does the Academy have fixed pricing across the Kingdom?',
+      ],
+      b2b: [
+        'How does Mwafq Business handle bulk employee bookings?',
+        'What does the "Fit for Service" badge mean for my employees?',
+      ],
+      about: [
+        "What is Mwafq's mission?",
+        "What are Mwafq's core values, like Speed & Efficiency?",
+      ],
+      contact: [
+        'How do I contact Mwafq support?',
+        "What is Mwafq's support email and phone number?",
+      ],
+      howItWorks: [
+        'How does booking a medical exam work in 3 steps?',
+        'Will I get notified before my medical certificate expires?',
+      ],
+      app: ['Is there a Mwafq mobile app for booking and results?'],
+    },
     inputPlaceholder: 'Write your message…',
     send: 'Send message',
     stop: 'Stop generating',

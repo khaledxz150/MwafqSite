@@ -3,7 +3,6 @@
 import { motion, useReducedMotion } from 'framer-motion';
 
 import { cn } from '@/shared/lib/cn';
-import { ChatBrandMark } from '@/modules/chatbot/components/ChatBrandMark';
 
 interface ChatGreetingProps {
   title: string;
@@ -24,14 +23,6 @@ export function ChatGreeting({
 
   return (
     <div className='flex flex-col items-center px-1 pt-4 text-center'>
-      <motion.span
-        initial={reduceMotion ? false : { scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <ChatBrandMark className='size-14 border-2 border-[#e5e7f0] shadow-sm shadow-[#1e2364]/10' />
-      </motion.span>
-
       <h3 className='mt-3 text-[15px] font-bold text-[#1e2364]'>{title}</h3>
       <p className='mt-1.5 max-w-[19rem] text-[12.5px] leading-relaxed text-[#6b7196]'>
         {body}

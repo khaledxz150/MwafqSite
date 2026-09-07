@@ -64,7 +64,15 @@ export function ChatLauncher({
             whileHover={reduceMotion ? undefined : { scale: 1.06 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
           >
-            {/* Abu Sahel — the illustration itself, no frame or circle. */}
+            {/* White backing disc — the artwork itself is transparent, so it
+                needs an opaque surface behind it rather than floating raw
+                over whatever the page background happens to be. */}
+            <span
+              aria-hidden
+              className='absolute inset-[8%] rounded-full bg-white shadow-lg shadow-[#1e2364]/25'
+            />
+
+            {/* Abu Sahel — the illustration, layered above the backing disc. */}
             <Image
               src='/mwafq-helper.webp'
               alt=''
@@ -73,7 +81,7 @@ export function ChatLauncher({
               height={296}
               priority
               className={cn(
-                'h-24 w-auto drop-shadow-[0_6px_14px_rgba(30,35,100,0.28)]',
+                'relative h-24 w-auto drop-shadow-[0_6px_14px_rgba(30,35,100,0.28)]',
                 // The artwork is drawn facing/leaning toward the right; mirror
                 // it when docked on the left so his posture still faces
                 // inward, toward the rest of the page.

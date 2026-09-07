@@ -10,11 +10,14 @@ import { ChatLauncher } from '@/modules/chatbot/components/ChatLauncher';
 import { ChatPanel } from '@/modules/chatbot/components/ChatPanel';
 import { ChatTeaserBubble } from '@/modules/chatbot/components/ChatTeaserBubble';
 import { useChatbot } from '@/modules/chatbot/hooks/useChatbot';
+import { useChatbotTopic } from '@/modules/chatbot/hooks/useChatbotTopic';
 
 export function ChatbotWidget() {
   const copy = useTranslations('chatbot');
   const locale = useLocale();
   const dir = isRtl(locale) ? 'rtl' : 'ltr';
+  const topic = useChatbotTopic();
+  const teaserSuggestions = copy.sectionSuggestions[topic];
 
   const [open, setOpen] = useState(false);
   const { messages, isPending, send, stop, reset } = useChatbot({
@@ -23,11 +26,15 @@ export function ChatbotWidget() {
 
   const close = useCallback(() => setOpen(false), []);
 
-  // Clicking the floating teaser cloud just opens the panel — it's a hint
-  // that this is a live assistant, not a shortcut that auto-asks for you.
-  const selectTeaser = useCallback(() => {
-    setOpen(true);
-  }, []);
+  // Clicking the floating teaser cloud opens the panel and immediately asks
+  // that question, so curiosity gets a real answer in one click.
+  const selectTeaser = useCallback(
+    (suggestion: string) => {
+      setOpen(true);
+      send(suggestion);
+    },
+    [send]
+  );
 
   // Esc closes the panel from anywhere on the page.
   useEffect(() => {
@@ -49,7 +56,10 @@ export function ChatbotWidget() {
       // language instead of following text direction.
       dir='ltr'
       className={cn(
-        'fixed bottom-0 z-50 flex flex-col gap-3 print:hidden',
+        // z-[200]: above every other stacking layer in the app (modals and
+        // the toast container both use lower tiers), so the widget never
+        // ends up hidden behind a dialog or overlay on any page.
+        'fixed bottom-0 z-[200] flex flex-col gap-3 print:hidden',
         // English sits bottom-left, Arabic sits bottom-right.
         rtl ? 'right-5 items-end' : 'left-5 items-start'
       )}
@@ -78,7 +88,8 @@ export function ChatbotWidget() {
       <div className='relative flex'>
         {!open && (
           <ChatTeaserBubble
-            suggestions={copy.suggestions}
+            key={topic}
+            suggestions={teaserSuggestions}
             side={rtl ? 'right' : 'left'}
             dir={dir}
             onSelect={selectTeaser}
