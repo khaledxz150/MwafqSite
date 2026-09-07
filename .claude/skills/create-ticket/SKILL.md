@@ -67,8 +67,13 @@ Pattern is `<KEY> <Area> — <imperative summary>` or `<KEY> <imperative
 summary>`, e.g. `MB-I21 Academy — Add course search to the listing page`.
 This repo's own `git log` is not a reliable style source (it carries many
 `save` / `some fixes` commits) — follow the pattern above, not the history.
-For a new ticket with no assigned key yet, omit the key or use a placeholder
-like `MB-I<TBD>` and say so — never invent a real-looking ticket number.
+Zoho Sprints assigns the real item number (`I<n>`) automatically on create —
+the title sent to `CreateItem` must never contain a placeholder like
+`MB-I<TBD>`. Omit the key from the title entirely when filing; the item
+number becomes known only after `CreateItem` returns, and step 8 below
+reports it back. A placeholder key is only ever acceptable in a `draft`-only
+response shown in chat (never filed) when the user explicitly wants to see
+where a key would go.
 
 Keep the title under ~70 characters, specific enough to disambiguate from
 similar tickets, phrased as the outcome (not the mechanism):
