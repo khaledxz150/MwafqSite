@@ -5,8 +5,9 @@
   "scripts": {
     "dev": "next dev",
     "dev:https": "next dev --experimental-https",
-    "clean": "rimraf .next .next.zip public.zip",
-    "build": "npm run clean && next build",
+    "clean": "rimraf .next .next.zip",
+    "compress-build": "node scripts/compressBuild.mjs",
+    "build": "npm run clean && next build && node scripts/compressBuild.mjs",
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
