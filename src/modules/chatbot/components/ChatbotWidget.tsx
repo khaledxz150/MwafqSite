@@ -12,12 +12,33 @@ import { ChatTeaserBubble } from '@/modules/chatbot/components/ChatTeaserBubble'
 import { useChatbot } from '@/modules/chatbot/hooks/useChatbot';
 import { useChatbotTopic } from '@/modules/chatbot/hooks/useChatbotTopic';
 
+/** Query param that unlocks the assistant, e.g. `?key=abusahel`. */
+const UNLOCK_PARAM = 'key';
+const UNLOCK_VALUE = 'abusahel';
+
 export function ChatbotWidget() {
   const copy = useTranslations('chatbot');
   const locale = useLocale();
   const dir = isRtl(locale) ? 'rtl' : 'ltr';
   const topic = useChatbotTopic();
   const teaserSuggestions = copy.sectionSuggestions[topic];
+
+  // Gated behind a query param (e.g. `?key=abusahel`) rather than always-on.
+  // Read on mount rather than via useSearchParams(), which would force a
+  // Suspense boundary around every page that renders this widget. Starts
+  // `false` (matching the server render, which has no `window`) and flips
+  // to `true` post-hydration if the param is present — never the reverse,
+  // so there's nothing to "flash" away when the key isn't in the URL.
+  const [unlocked, setUnlocked] = useState(false);
+  useEffect(() => {
+    const isUnlocked =
+      new URLSearchParams(window.location.search).get(UNLOCK_PARAM) ===
+      UNLOCK_VALUE;
+    // Syncing from the URL (an external source with no React-visible
+    // subscription) is exactly what this effect is for.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (isUnlocked) setUnlocked(true);
+  }, []);
 
   const [open, setOpen] = useState(false);
   const { messages, isPending, send, stop, reset } = useChatbot({
@@ -52,6 +73,10 @@ export function ChatbotWidget() {
   }, [open, close]);
 
   const rtl = dir === 'rtl';
+
+  // Gate the render, not the hooks above — hooks must always run in the
+  // same order regardless of the unlock state.
+  if (!unlocked) return null;
 
   return (
     <div
